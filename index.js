@@ -19,13 +19,35 @@ app.get('/', (req, res) => {
 // Ruta para obtener todos los usuarios registrados en la base de datos
 app.get('/api/usuarios', (req, res) => {
   const query = 'SELECT * FROM usuarios';
-
   db.query(query, (err, results) => {
     if (err) {
       console.error('❌ Error en la consulta:', err);
       return res.status(500).json({ error: 'Error en el servidor' });
     }
-    res.json(results); // Enviamos los usuarios en formato JSON
+    res.json(results);
+  });
+});
+
+// Ruta para registrar un nuevo usuario
+app.post('/api/usuarios', (req, res) => {
+  const { nombre, apellido, celular, cedula, direccion, email, contrasena, tipo } = req.body;
+
+  if (!nombre || !apellido || !celular || !cedula || !direccion || !email || !contrasena || !tipo) {
+    return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+  }
+
+  const query = `
+    INSERT INTO usuarios (nombre, apellido, celular, cedula, direccion, email, contrasena, tipo)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+  const values = [nombre, apellido, celular, cedula, direccion, email, contrasena, tipo];
+
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error('❌ Error al insertar el usuario:', err);
+      return res.status(500).json({ error: 'Error al crear el usuario' });
+    }
+    res.status(201).json({ mensaje: '✅ Usuario creado correctamente', id: result.insertId });
   });
 });
 
