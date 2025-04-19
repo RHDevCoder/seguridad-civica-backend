@@ -41,6 +41,10 @@ app.use('/api/pagos', rutasPagos);
 const rutasSolicitudes = require('./routes/solicitudes');
 app.use('/api/solicitudes', rutasSolicitudes);
 
+// Rutas CRUD para la tabla de empleadosRoles
+const rutasEmpleadosRoles = require('./routes/empleadosRoles');
+app.use('/api/empleados-roles', rutasEmpleadosRoles);
+
 // Rutas CRUD para la tabla de historial_cambios
 const rutasHistorialCambios = require('./routes/historialCambios');
 app.use('/api/historial-cambios', rutasHistorialCambios);
