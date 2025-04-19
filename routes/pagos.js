@@ -3,9 +3,10 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
+const verificarToken = require('../middlewares/auth'); // 🔐 Protección JWT
 
-// Obtener todos los pagos
-router.get('/', (req, res) => {
+// 🔐 Obtener todos los pagos (protegido)
+router.get('/', verificarToken, (req, res) => {
   db.query('SELECT * FROM pagos', (err, results) => {
     if (err) {
       console.error('❌ Error al obtener pagos:', err);
@@ -15,8 +16,8 @@ router.get('/', (req, res) => {
   });
 });
 
-// Obtener un pago por ID
-router.get('/:id', (req, res) => {
+// 🔐 Obtener un pago por ID (protegido)
+router.get('/:id', verificarToken, (req, res) => {
   const { id } = req.params;
   db.query('SELECT * FROM pagos WHERE id = ?', [id], (err, results) => {
     if (err) {
@@ -30,17 +31,19 @@ router.get('/:id', (req, res) => {
   });
 });
 
-// Crear un nuevo pago
-router.post('/', (req, res) => {
+// 🔐 Crear un nuevo pago (protegido)
+router.post('/', verificarToken, (req, res) => {
   const { venta_id, auxiliar_id, fecha_pago, numero_cuota, valor } = req.body;
   if (!venta_id || !auxiliar_id || !fecha_pago || !numero_cuota || !valor) {
     return res.status(400).json({ error: 'Todos los campos son obligatorios' });
   }
+
   const query = `
     INSERT INTO pagos (venta_id, auxiliar_id, fecha_pago, numero_cuota, valor)
     VALUES (?, ?, ?, ?, ?)
   `;
   const values = [venta_id, auxiliar_id, fecha_pago, numero_cuota, valor];
+
   db.query(query, values, (err, result) => {
     if (err) {
       console.error('❌ Error al crear el pago:', err);
@@ -50,19 +53,21 @@ router.post('/', (req, res) => {
   });
 });
 
-// Actualizar un pago por ID
-router.put('/:id', (req, res) => {
+// 🔐 Actualizar un pago por ID (protegido)
+router.put('/:id', verificarToken, (req, res) => {
   const { id } = req.params;
   const { venta_id, auxiliar_id, fecha_pago, numero_cuota, valor } = req.body;
   if (!venta_id || !auxiliar_id || !fecha_pago || !numero_cuota || !valor) {
     return res.status(400).json({ error: 'Todos los campos son obligatorios' });
   }
+
   const query = `
     UPDATE pagos
     SET venta_id = ?, auxiliar_id = ?, fecha_pago = ?, numero_cuota = ?, valor = ?
     WHERE id = ?
   `;
   const values = [venta_id, auxiliar_id, fecha_pago, numero_cuota, valor, id];
+
   db.query(query, values, (err, result) => {
     if (err) {
       console.error('❌ Error al actualizar el pago:', err);
@@ -75,8 +80,8 @@ router.put('/:id', (req, res) => {
   });
 });
 
-// Eliminar un pago por ID
-router.delete('/:id', (req, res) => {
+// 🔐 Eliminar un pago por ID (protegido)
+router.delete('/:id', verificarToken, (req, res) => {
   const { id } = req.params;
   db.query('DELETE FROM pagos WHERE id = ?', [id], (err, result) => {
     if (err) {
