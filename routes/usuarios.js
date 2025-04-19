@@ -4,9 +4,10 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 const bcrypt = require('bcrypt');
+const verificarToken = require('../middlewares/auth'); // Middleware de autenticación JWT
 
-// GET: Obtener todos los usuarios
-router.get('/', (req, res) => {
+// 🔐 GET: Obtener todos los usuarios (protegido)
+router.get('/', verificarToken, (req, res) => {
   const query = 'SELECT * FROM usuarios';
   db.query(query, (err, results) => {
     if (err) return res.status(500).json({ error: 'Error en el servidor' });
@@ -14,8 +15,8 @@ router.get('/', (req, res) => {
   });
 });
 
-// GET: Obtener un solo usuario por ID
-router.get('/:id', (req, res) => {
+// 🔐 GET: Obtener un solo usuario por ID (protegido)
+router.get('/:id', verificarToken, (req, res) => {
   const { id } = req.params;
   const query = 'SELECT * FROM usuarios WHERE id = ?';
   db.query(query, [id], (err, results) => {
@@ -25,7 +26,7 @@ router.get('/:id', (req, res) => {
   });
 });
 
-// POST: Crear un nuevo usuario
+// POST: Crear un nuevo usuario (no protegido, ya que se usa para registrar nuevos)
 router.post('/', (req, res) => {
   const { nombre, apellido, celular, cedula, direccion, email, contrasena, tipo } = req.body;
 
@@ -53,8 +54,8 @@ router.post('/', (req, res) => {
   });
 });
 
-// PUT: Actualizar un usuario por ID (incluye encriptación de contraseña)
-router.put('/:id', (req, res) => {
+// 🔐 PUT: Actualizar un usuario por ID (protegido)
+router.put('/:id', verificarToken, (req, res) => {
   const { id } = req.params;
   const { nombre, apellido, celular, cedula, direccion, email, contrasena, tipo } = req.body;
 
@@ -84,8 +85,8 @@ router.put('/:id', (req, res) => {
   });
 });
 
-// DELETE: Eliminar un usuario por ID
-router.delete('/:id', (req, res) => {
+// 🔐 DELETE: Eliminar un usuario por ID (protegido)
+router.delete('/:id', verificarToken, (req, res) => {
   const { id } = req.params;
 
   const query = 'DELETE FROM usuarios WHERE id = ?';

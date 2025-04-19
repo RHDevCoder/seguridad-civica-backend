@@ -1,10 +1,9 @@
-// routes/login.js
-
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+require('dotenv').config(); // Carga las variables de entorno
 
 // Ruta para iniciar sesión
 router.post('/', (req, res) => {
@@ -14,7 +13,6 @@ router.post('/', (req, res) => {
     return res.status(400).json({ error: 'Email y contraseña son obligatorios' });
   }
 
-  // Buscar el usuario por email
   const query = 'SELECT * FROM usuarios WHERE email = ?';
   db.query(query, [email], (err, results) => {
     if (err) {
@@ -28,7 +26,6 @@ router.post('/', (req, res) => {
 
     const usuario = results[0];
 
-    // Comparar la contraseña ingresada con la almacenada en la base de datos
     bcrypt.compare(contrasena, usuario.contrasena, (err, esValida) => {
       if (err) {
         console.error('❌ Error al verificar la contraseña:', err);
@@ -39,16 +36,19 @@ router.post('/', (req, res) => {
         return res.status(401).json({ mensaje: '❌ Contraseña incorrecta' });
       }
 
-      // Generar token JWT
-      const token = jwt.sign(
-        { id: usuario.id, email: usuario.email, tipo: usuario.tipo },
-        process.env.JWT_SECRET,
-        { expiresIn: '4h' }
-      );
+      // Si es válida, generar el token
+      const payload = {
+        id: usuario.id,
+        email: usuario.email,
+        tipo: usuario.tipo
+      };
 
-      // Retornar usuario sin la contraseña
+      const token = jwt.sign(payload, process.env.JWT_SECRET, {
+        expiresIn: '2h' // Token válido por 2 horas
+      });
+
+      // Devolver token y datos del usuario (sin contraseña)
       const { contrasena, ...usuarioSinContrasena } = usuario;
-
       res.json({
         mensaje: '✅ Login exitoso',
         token,

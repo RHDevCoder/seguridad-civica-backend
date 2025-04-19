@@ -3,9 +3,10 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
+const verificarToken = require('../middlewares/auth'); // 🔐 Middleware para proteger las rutas
 
-// Obtener todos los roles
-router.get('/', (req, res) => {
+// 🔐 Obtener todos los roles
+router.get('/', verificarToken, (req, res) => {
   db.query('SELECT * FROM roles', (err, results) => {
     if (err) {
       console.error('❌ Error al obtener roles:', err);
@@ -15,8 +16,8 @@ router.get('/', (req, res) => {
   });
 });
 
-// Obtener un rol por ID
-router.get('/:id', (req, res) => {
+// 🔐 Obtener un rol por ID
+router.get('/:id', verificarToken, (req, res) => {
   const { id } = req.params;
   db.query('SELECT * FROM roles WHERE id = ?', [id], (err, results) => {
     if (err) {
@@ -30,8 +31,8 @@ router.get('/:id', (req, res) => {
   });
 });
 
-// Crear un nuevo rol
-router.post('/', (req, res) => {
+// 🔐 Crear un nuevo rol
+router.post('/', verificarToken, (req, res) => {
   const { nombre } = req.body;
   if (!nombre) {
     return res.status(400).json({ error: 'El nombre del rol es obligatorio' });
@@ -45,8 +46,8 @@ router.post('/', (req, res) => {
   });
 });
 
-// Actualizar un rol por ID
-router.put('/:id', (req, res) => {
+// 🔐 Actualizar un rol por ID
+router.put('/:id', verificarToken, (req, res) => {
   const { id } = req.params;
   const { nombre } = req.body;
   if (!nombre) {
@@ -64,8 +65,8 @@ router.put('/:id', (req, res) => {
   });
 });
 
-// Eliminar un rol por ID
-router.delete('/:id', (req, res) => {
+// 🔐 Eliminar un rol por ID
+router.delete('/:id', verificarToken, (req, res) => {
   const { id } = req.params;
   db.query('DELETE FROM roles WHERE id = ?', [id], (err, result) => {
     if (err) {
