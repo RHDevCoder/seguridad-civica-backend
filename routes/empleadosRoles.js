@@ -1,9 +1,12 @@
+// routes/empleadosRoles.js
+
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
+const verificarToken = require('../middlewares/auth'); // 🔐 Middleware de autenticación
 
-// Obtener todos los roles de un empleado específico por su ID
-router.get('/empleado/:id', (req, res) => {
+// 🔐 Obtener todos los roles de un empleado específico por su ID
+router.get('/empleado/:id', verificarToken, (req, res) => {
   const { id } = req.params;
 
   const query = `
@@ -28,8 +31,8 @@ router.get('/empleado/:id', (req, res) => {
   });
 });
 
-// Asignar un rol a un empleado
-router.post('/', (req, res) => {
+// 🔐 Asignar un rol a un empleado
+router.post('/', verificarToken, (req, res) => {
   const { empleado_id, rol_id } = req.body;
 
   if (!empleado_id || !rol_id) {
@@ -47,8 +50,8 @@ router.post('/', (req, res) => {
   });
 });
 
-// Eliminar un rol asignado a un empleado
-router.delete('/', (req, res) => {
+// 🔐 Eliminar un rol asignado a un empleado
+router.delete('/', verificarToken, (req, res) => {
   const { empleado_id, rol_id } = req.body;
 
   if (!empleado_id || !rol_id) {
