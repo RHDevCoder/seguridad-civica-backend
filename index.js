@@ -29,9 +29,13 @@ app.use('/api/articulos', rutasArticulos);
 const rutasVentas = require('./routes/ventas');
 app.use('/api/ventas', rutasVentas);
 
-// Rutas CRUD para la tabla de detalle_venta
+// Rutas CRUD para la tabla de detalleVenta
 const rutasDetalleVenta = require('./routes/detalleVenta');
 app.use('/api/detalle-venta', rutasDetalleVenta);
+
+// Rutas CRUD para la tabla de pagos
+const rutasPagos = require('./routes/pagos');
+app.use('/api/pagos', rutasPagos);
 
 // Iniciamos el servidor
 app.listen(port, () => {

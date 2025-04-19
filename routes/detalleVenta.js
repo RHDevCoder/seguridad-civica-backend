@@ -1,4 +1,4 @@
-// routes/detalle_venta.js
+// routes/detalleVenta.js
 
 const express = require('express');
 const router = express.Router();
