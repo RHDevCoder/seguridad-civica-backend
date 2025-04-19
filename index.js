@@ -1,25 +1,23 @@
 // index.js
 
+// Requerimos Express y creamos una instancia de la aplicación
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Conexión a la base de datos
-const db = require('./db');
-
-// Middleware
+// Middleware para analizar solicitudes JSON entrantes
 app.use(express.json());
 
-// Ruta base de prueba
+// Ruta base para verificar que la API está funcionando
 app.get('/', (req, res) => {
   res.send('🚨 API Seguridad Cívica funcionando correctamente.');
 });
 
-// Rutas
+// Rutas del módulo de usuarios
 const rutasUsuarios = require('./routes/usuarios');
 app.use('/api/usuarios', rutasUsuarios);
 
-// Iniciar el servidor
+// Iniciamos el servidor
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
 });
