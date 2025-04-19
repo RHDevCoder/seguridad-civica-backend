@@ -1,0 +1,134 @@
+[
+    {
+        "id": 1,
+        "nombre": "Juan David",
+        "apellido": "Pérez Lozano",
+        "celular": "3109876543",
+        "cedula": "10101010",
+        "direccion": "Calle Nueva 456",
+        "email": "juan.david@email.com",
+        "contrasena": "nuevoPassword456",
+        "tipo": "Cliente"
+    },
+    {
+        "id": 2,
+        "nombre": "Carlos",
+        "apellido": "López",
+        "celular": "3105678912",
+        "cedula": "30303030",
+        "direccion": "Carrera 2 #15-40",
+        "email": "carlos.lopez@email.com",
+        "contrasena": "password789",
+        "tipo": "Cliente"
+    },
+    {
+        "id": 3,
+        "nombre": "Andrea",
+        "apellido": "Martínez",
+        "celular": "3201234567",
+        "cedula": "40404040",
+        "direccion": "Avenida 3 #8-55",
+        "email": "andrea.martinez@email.com",
+        "contrasena": "password101",
+        "tipo": "Cliente"
+    },
+    {
+        "id": 4,
+        "nombre": "Lucía",
+        "apellido": "Ramírez",
+        "celular": "3059876543",
+        "cedula": "50505050",
+        "direccion": "Calle 4 #12-34",
+        "email": "lucia.ramirez@email.com",
+        "contrasena": "password202",
+        "tipo": "Cliente"
+    },
+    {
+        "id": 5,
+        "nombre": "Fernando",
+        "apellido": "Gómez",
+        "celular": "3123456789",
+        "cedula": "60606060",
+        "direccion": "Carrera 5 #20-78",
+        "email": "fernando.gomez@email.com",
+        "contrasena": "password303",
+        "tipo": "Cliente"
+    },
+    {
+        "id": 6,
+        "nombre": "María",
+        "apellido": "Gómez",
+        "celular": "3112233445",
+        "cedula": "20202020",
+        "direccion": "Avenida Siempre Viva 742",
+        "email": "maria.gomez@email.com",
+        "contrasena": "password456",
+        "tipo": "Empleado"
+    },
+    {
+        "id": 7,
+        "nombre": "Pedro",
+        "apellido": "Ramírez",
+        "celular": "3129876543",
+        "cedula": "44444444",
+        "direccion": "Carrera 12 #8-20",
+        "email": "pedro.ramirez@email.com",
+        "contrasena": "password010",
+        "tipo": "Empleado"
+    },
+    {
+        "id": 8,
+        "nombre": "Sofía",
+        "apellido": "González",
+        "celular": "3224567890",
+        "cedula": "55555555",
+        "direccion": "Avenida 13 #14-30",
+        "email": "sofia.gonzalez@email.com",
+        "contrasena": "password020",
+        "tipo": "Empleado"
+    },
+    {
+        "id": 9,
+        "nombre": "Luis",
+        "apellido": "Fernández",
+        "celular": "3157896542",
+        "cedula": "66666666",
+        "direccion": "Calle 14 #18-50",
+        "email": "luis.fernandez@email.com",
+        "contrasena": "password030",
+        "tipo": "Empleado"
+    },
+    {
+        "id": 10,
+        "nombre": "Camila",
+        "apellido": "Moreno",
+        "celular": "3176543219",
+        "cedula": "77777777",
+        "direccion": "Carrera 15 #10-60",
+        "email": "camila.moreno@email.com",
+        "contrasena": "password040",
+        "tipo": "Empleado"
+    },
+    {
+        "id": 11,
+        "nombre": "Raúl",
+        "apellido": "Sánchez",
+        "celular": "3198521473",
+        "cedula": "88888888",
+        "direccion": "Avenida 16 #6-40",
+        "email": "raul.sanchez@email.com",
+        "contrasena": "password050",
+        "tipo": "Empleado"
+    },
+    {
+        "id": 12,
+        "nombre": "Elena",
+        "apellido": "Ortega",
+        "celular": "3237412589",
+        "cedula": "99999999",
+        "direccion": "Calle 17 #25-70",
+        "email": "elena.ortega@email.com",
+        "contrasena": "password060",
+        "tipo": "Empleado"
+    }
+]
