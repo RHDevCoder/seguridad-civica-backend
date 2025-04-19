@@ -17,6 +17,10 @@ app.get('/', (req, res) => {
 const rutasUsuarios = require('./routes/usuarios');
 app.use('/api/usuarios', rutasUsuarios);
 
+// Rutas CRUD para la tabla de roles
+const rutasRoles = require('./routes/roles');
+app.use('/api/roles', rutasRoles);
+
 // Iniciamos el servidor
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
