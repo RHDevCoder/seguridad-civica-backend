@@ -3,9 +3,10 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
+const verificarToken = require('../middlewares/auth'); // Protección con JWT
 
-// Obtener todas las solicitudes
-router.get('/', (req, res) => {
+// 🔐 Obtener todas las solicitudes (protegido)
+router.get('/', verificarToken, (req, res) => {
   db.query('SELECT * FROM solicitudes', (err, results) => {
     if (err) {
       console.error('❌ Error al obtener las solicitudes:', err);
@@ -15,8 +16,8 @@ router.get('/', (req, res) => {
   });
 });
 
-// Obtener una solicitud por ID
-router.get('/:id', (req, res) => {
+// 🔐 Obtener una solicitud por ID (protegido)
+router.get('/:id', verificarToken, (req, res) => {
   const { id } = req.params;
   db.query('SELECT * FROM solicitudes WHERE id = ?', [id], (err, results) => {
     if (err) {
@@ -30,7 +31,7 @@ router.get('/:id', (req, res) => {
   });
 });
 
-// Crear una nueva solicitud
+// 🔓 Crear una nueva solicitud (pública, puede ser desde cliente sin logueo)
 router.post('/', (req, res) => {
   const { cliente_id, tipo } = req.body;
 
@@ -53,8 +54,8 @@ router.post('/', (req, res) => {
   });
 });
 
-// Actualizar una solicitud por ID
-router.put('/:id', (req, res) => {
+// 🔐 Actualizar una solicitud por ID (protegido)
+router.put('/:id', verificarToken, (req, res) => {
   const { id } = req.params;
   const { cliente_id, tipo } = req.body;
 
@@ -83,8 +84,8 @@ router.put('/:id', (req, res) => {
   });
 });
 
-// Eliminar una solicitud por ID
-router.delete('/:id', (req, res) => {
+// 🔐 Eliminar una solicitud por ID (protegido)
+router.delete('/:id', verificarToken, (req, res) => {
   const { id } = req.params;
 
   db.query('DELETE FROM solicitudes WHERE id = ?', [id], (err, result) => {
