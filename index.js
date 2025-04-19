@@ -37,6 +37,10 @@ app.use('/api/detalle-venta', rutasDetalleVenta);
 const rutasPagos = require('./routes/pagos');
 app.use('/api/pagos', rutasPagos);
 
+// Rutas CRUD para la tabla de solicitudes
+const rutasSolicitudes = require('./routes/solicitudes');
+app.use('/api/solicitudes', rutasSolicitudes);
+
 // Iniciamos el servidor
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
