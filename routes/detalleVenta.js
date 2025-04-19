@@ -3,9 +3,10 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
+const verificarToken = require('../middlewares/auth'); // 🛡️ Middleware de autenticación
 
-// Obtener todos los detalles de venta
-router.get('/', (req, res) => {
+// 🔐 Obtener todos los detalles de venta (protegido)
+router.get('/', verificarToken, (req, res) => {
   db.query('SELECT * FROM detalle_venta', (err, results) => {
     if (err) {
       console.error('❌ Error al obtener los detalles de venta:', err);
@@ -15,8 +16,8 @@ router.get('/', (req, res) => {
   });
 });
 
-// Obtener un detalle de venta por ID
-router.get('/:id', (req, res) => {
+// 🔐 Obtener un detalle de venta por ID (protegido)
+router.get('/:id', verificarToken, (req, res) => {
   const { id } = req.params;
   db.query('SELECT * FROM detalle_venta WHERE id = ?', [id], (err, results) => {
     if (err) {
@@ -30,8 +31,8 @@ router.get('/:id', (req, res) => {
   });
 });
 
-// Crear un nuevo detalle de venta
-router.post('/', (req, res) => {
+// 🔐 Crear un nuevo detalle de venta (protegido)
+router.post('/', verificarToken, (req, res) => {
   const { venta_id, articulo_id, cantidad, precio_unitario } = req.body;
 
   if (!venta_id || !articulo_id || !cantidad || !precio_unitario) {
@@ -53,8 +54,8 @@ router.post('/', (req, res) => {
   });
 });
 
-// Actualizar un detalle de venta por ID
-router.put('/:id', (req, res) => {
+// 🔐 Actualizar un detalle de venta por ID (protegido)
+router.put('/:id', verificarToken, (req, res) => {
   const { id } = req.params;
   const { venta_id, articulo_id, cantidad, precio_unitario } = req.body;
 
@@ -83,8 +84,8 @@ router.put('/:id', (req, res) => {
   });
 });
 
-// Eliminar un detalle de venta por ID
-router.delete('/:id', (req, res) => {
+// 🔐 Eliminar un detalle de venta por ID (protegido)
+router.delete('/:id', verificarToken, (req, res) => {
   const { id } = req.params;
   db.query('DELETE FROM detalle_venta WHERE id = ?', [id], (err, result) => {
     if (err) {
