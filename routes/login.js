@@ -1,9 +1,10 @@
-//routes/login.js
+// routes/login.js
 
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 // Ruta para iniciar sesión
 router.post('/', (req, res) => {
@@ -27,7 +28,7 @@ router.post('/', (req, res) => {
 
     const usuario = results[0];
 
-    // Comparar la contraseña ingresada con el hash almacenado
+    // Comparar la contraseña ingresada con la almacenada en la base de datos
     bcrypt.compare(contrasena, usuario.contrasena, (err, esValida) => {
       if (err) {
         console.error('❌ Error al verificar la contraseña:', err);
@@ -38,9 +39,21 @@ router.post('/', (req, res) => {
         return res.status(401).json({ mensaje: '❌ Contraseña incorrecta' });
       }
 
-      // Si todo está bien, devolver los datos del usuario (sin la contraseña)
+      // Generar token JWT
+      const token = jwt.sign(
+        { id: usuario.id, email: usuario.email, tipo: usuario.tipo },
+        process.env.JWT_SECRET,
+        { expiresIn: '4h' }
+      );
+
+      // Retornar usuario sin la contraseña
       const { contrasena, ...usuarioSinContrasena } = usuario;
-      res.json({ mensaje: '✅ Login exitoso', usuario: usuarioSinContrasena });
+
+      res.json({
+        mensaje: '✅ Login exitoso',
+        token,
+        usuario: usuarioSinContrasena
+      });
     });
   });
 });

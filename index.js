@@ -1,5 +1,7 @@
 // index.js
 
+require('dotenv').config(); // ✅ Cargar variables de entorno desde .env
+
 // Requerimos Express y creamos una instancia de la aplicación
 const express = require('express');
 const app = express();
