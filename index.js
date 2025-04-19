@@ -101,6 +101,26 @@ app.delete('/api/usuarios/:id', (req, res) => {
     });
   });
   
+// Ruta para obtener un usuario específico por ID
+app.get('/api/usuarios/:id', (req, res) => {
+    const { id } = req.params;
+  
+    const query = 'SELECT * FROM usuarios WHERE id = ?';
+  
+    db.query(query, [id], (err, results) => {
+      if (err) {
+        console.error('❌ Error al buscar el usuario:', err);
+        return res.status(500).json({ error: 'Error al buscar el usuario' });
+      }
+  
+      if (results.length === 0) {
+        return res.status(404).json({ mensaje: '❌ Usuario no encontrado' });
+      }
+  
+      res.json(results[0]); // Devolvemos solo el objeto del usuario
+    });
+  });
+  
 // Iniciamos el servidor en el puerto definido (por defecto 3000)
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
