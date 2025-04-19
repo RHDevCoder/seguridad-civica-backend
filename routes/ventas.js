@@ -3,9 +3,10 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
+const verificarToken = require('../middlewares/auth'); // Middleware de autenticación JWT
 
-// Obtener todas las ventas
-router.get('/', (req, res) => {
+// 🔐 Obtener todas las ventas (protegido)
+router.get('/', verificarToken, (req, res) => {
   const query = 'SELECT * FROM ventas';
   db.query(query, (err, results) => {
     if (err) {
@@ -16,8 +17,8 @@ router.get('/', (req, res) => {
   });
 });
 
-// Obtener una venta por ID
-router.get('/:id', (req, res) => {
+// 🔐 Obtener una venta por ID (protegido)
+router.get('/:id', verificarToken, (req, res) => {
   const { id } = req.params;
   db.query('SELECT * FROM ventas WHERE id = ?', [id], (err, results) => {
     if (err) {
@@ -31,8 +32,8 @@ router.get('/:id', (req, res) => {
   });
 });
 
-// Crear una nueva venta
-router.post('/', (req, res) => {
+// 🔐 Crear una nueva venta (protegido)
+router.post('/', verificarToken, (req, res) => {
   const { cliente_id, fecha_venta, fecha_instalacion, tipo_pago, analista_id, tecnico_id, direccion_envio } = req.body;
 
   if (!cliente_id || !tipo_pago || !analista_id || !direccion_envio) {
@@ -54,8 +55,8 @@ router.post('/', (req, res) => {
   });
 });
 
-// Actualizar una venta por ID
-router.put('/:id', (req, res) => {
+// 🔐 Actualizar una venta por ID (protegido)
+router.put('/:id', verificarToken, (req, res) => {
   const { id } = req.params;
   const { cliente_id, fecha_venta, fecha_instalacion, tipo_pago, analista_id, tecnico_id, direccion_envio } = req.body;
 
@@ -77,8 +78,8 @@ router.put('/:id', (req, res) => {
   });
 });
 
-// Eliminar una venta por ID
-router.delete('/:id', (req, res) => {
+// 🔐 Eliminar una venta por ID (protegido)
+router.delete('/:id', verificarToken, (req, res) => {
   const { id } = req.params;
   db.query('DELETE FROM ventas WHERE id = ?', [id], (err, result) => {
     if (err) {
