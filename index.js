@@ -29,6 +29,10 @@ app.use('/api/articulos', rutasArticulos);
 const rutasVentas = require('./routes/ventas');
 app.use('/api/ventas', rutasVentas);
 
+// Rutas CRUD para la tabla de detalle_venta
+const rutasDetalleVenta = require('./routes/detalleVenta');
+app.use('/api/detalle-venta', rutasDetalleVenta);
+
 // Iniciamos el servidor
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
