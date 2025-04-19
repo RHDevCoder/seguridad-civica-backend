@@ -49,6 +49,10 @@ app.use('/api/empleados-roles', rutasEmpleadosRoles);
 const rutasHistorialCambios = require('./routes/historialCambios');
 app.use('/api/historial-cambios', rutasHistorialCambios);
 
+// Ruta de login
+const rutaLogin = require('./routes/login');
+app.use('/api/login', rutaLogin);
+
 // Iniciamos el servidor
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);

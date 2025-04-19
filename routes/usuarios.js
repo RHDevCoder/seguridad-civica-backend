@@ -2,7 +2,8 @@
 
 const express = require('express');
 const router = express.Router();
-const db = require('../db'); // Conexión a la base de datos
+const db = require('../db');
+const bcrypt = require('bcrypt');
 
 // GET: Obtener todos los usuarios
 router.get('/', (req, res) => {
@@ -10,6 +11,17 @@ router.get('/', (req, res) => {
   db.query(query, (err, results) => {
     if (err) return res.status(500).json({ error: 'Error en el servidor' });
     res.json(results);
+  });
+});
+
+// GET: Obtener un solo usuario por ID
+router.get('/:id', (req, res) => {
+  const { id } = req.params;
+  const query = 'SELECT * FROM usuarios WHERE id = ?';
+  db.query(query, [id], (err, results) => {
+    if (err) return res.status(500).json({ error: 'Error al buscar el usuario' });
+    if (results.length === 0) return res.status(404).json({ mensaje: '❌ Usuario no encontrado' });
+    res.json(results[0]);
   });
 });
 
@@ -21,19 +33,27 @@ router.post('/', (req, res) => {
     return res.status(400).json({ error: 'Todos los campos son obligatorios' });
   }
 
-  const query = `
-    INSERT INTO usuarios (nombre, apellido, celular, cedula, direccion, email, contrasena, tipo)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-  `;
-  const values = [nombre, apellido, celular, cedula, direccion, email, contrasena, tipo];
+  const saltRounds = 10;
+  bcrypt.hash(contrasena, saltRounds, (err, hash) => {
+    if (err) {
+      console.error('❌ Error al encriptar la contraseña:', err);
+      return res.status(500).json({ error: 'Error al encriptar la contraseña' });
+    }
 
-  db.query(query, values, (err, result) => {
-    if (err) return res.status(500).json({ error: 'Error al crear el usuario' });
-    res.status(201).json({ mensaje: '✅ Usuario creado correctamente', id: result.insertId });
+    const query = `
+      INSERT INTO usuarios (nombre, apellido, celular, cedula, direccion, email, contrasena, tipo)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+    const values = [nombre, apellido, celular, cedula, direccion, email, hash, tipo];
+
+    db.query(query, values, (err, result) => {
+      if (err) return res.status(500).json({ error: 'Error al crear el usuario' });
+      res.status(201).json({ mensaje: '✅ Usuario creado correctamente', id: result.insertId });
+    });
   });
 });
 
-// PUT: Actualizar un usuario por ID
+// PUT: Actualizar un usuario por ID (incluye encriptación de contraseña)
 router.put('/:id', (req, res) => {
   const { id } = req.params;
   const { nombre, apellido, celular, cedula, direccion, email, contrasena, tipo } = req.body;
@@ -42,17 +62,25 @@ router.put('/:id', (req, res) => {
     return res.status(400).json({ error: 'Todos los campos son obligatorios' });
   }
 
-  const query = `
-    UPDATE usuarios
-    SET nombre = ?, apellido = ?, celular = ?, cedula = ?, direccion = ?, email = ?, contrasena = ?, tipo = ?
-    WHERE id = ?
-  `;
-  const values = [nombre, apellido, celular, cedula, direccion, email, contrasena, tipo, id];
+  const saltRounds = 10;
+  bcrypt.hash(contrasena, saltRounds, (err, hash) => {
+    if (err) {
+      console.error('❌ Error al encriptar la contraseña:', err);
+      return res.status(500).json({ error: 'Error al encriptar la contraseña' });
+    }
 
-  db.query(query, values, (err, result) => {
-    if (err) return res.status(500).json({ error: 'Error al actualizar el usuario' });
-    if (result.affectedRows === 0) return res.status(404).json({ mensaje: '❌ Usuario no encontrado' });
-    res.json({ mensaje: '✅ Usuario actualizado correctamente' });
+    const query = `
+      UPDATE usuarios
+      SET nombre = ?, apellido = ?, celular = ?, cedula = ?, direccion = ?, email = ?, contrasena = ?, tipo = ?
+      WHERE id = ?
+    `;
+    const values = [nombre, apellido, celular, cedula, direccion, email, hash, tipo, id];
+
+    db.query(query, values, (err, result) => {
+      if (err) return res.status(500).json({ error: 'Error al actualizar el usuario' });
+      if (result.affectedRows === 0) return res.status(404).json({ mensaje: '❌ Usuario no encontrado' });
+      res.json({ mensaje: '✅ Usuario actualizado correctamente' });
+    });
   });
 });
 
@@ -65,18 +93,6 @@ router.delete('/:id', (req, res) => {
     if (err) return res.status(500).json({ error: 'Error al eliminar el usuario' });
     if (result.affectedRows === 0) return res.status(404).json({ mensaje: '❌ Usuario no encontrado' });
     res.json({ mensaje: '🗑️ Usuario eliminado correctamente' });
-  });
-});
-
-// GET: Obtener un solo usuario por ID
-router.get('/:id', (req, res) => {
-  const { id } = req.params;
-
-  const query = 'SELECT * FROM usuarios WHERE id = ?';
-  db.query(query, [id], (err, results) => {
-    if (err) return res.status(500).json({ error: 'Error al buscar el usuario' });
-    if (results.length === 0) return res.status(404).json({ mensaje: '❌ Usuario no encontrado' });
-    res.json(results[0]);
   });
 });
 

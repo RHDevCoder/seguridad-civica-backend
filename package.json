@@ -18,6 +18,7 @@
   "homepage": "https://github.com/RHDevCoder/seguridad-civica-backend#readme",
   "description": "",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "express": "^5.1.0",
     "mysql2": "^3.14.0"
   }
