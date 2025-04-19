@@ -41,6 +41,10 @@ app.use('/api/pagos', rutasPagos);
 const rutasSolicitudes = require('./routes/solicitudes');
 app.use('/api/solicitudes', rutasSolicitudes);
 
+// Rutas CRUD para la tabla de historial_cambios
+const rutasHistorialCambios = require('./routes/historialCambios');
+app.use('/api/historial-cambios', rutasHistorialCambios);
+
 // Iniciamos el servidor
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
